@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tele-proxy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tele-proxy
+  template:
+    metadata:
+      labels:
+        app: tele-proxy
+    spec:
+      containers:
+      - name: tele-proxy
+        image: fullpipe/tele-proxy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tele-proxy
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    targetPort: 80
+    port: 80
+    nodePort: 30012
+  selector:
+    app: tele-proxy
